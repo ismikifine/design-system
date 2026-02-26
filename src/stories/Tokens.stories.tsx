@@ -17,10 +17,6 @@ function StorySection({ title, children }: StorySectionProps) {
   );
 }
 
-function isHexColor(value: unknown): value is string {
-  return typeof value === 'string' && /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(value);
-}
-
 function hexToRgb(hex: string) {
   const h = hex.replace('#', '');
   const r = Number.parseInt(h.slice(0, 2), 16);
@@ -74,34 +70,10 @@ function ColorScaleRow({ name, scale }: { name: string; scale: Record<string | n
 }
 
 function ColorSection() {
-  const semanticEntries: Array<[string, string]> = [];
-
-  for (const [groupKey, groupVal] of Object.entries(tokens.color)) {
-    if (groupVal && typeof groupVal === 'object') {
-      const hasOnlyHex = Object.values(groupVal).every(isHexColor);
-      if (!hasOnlyHex) {
-        for (const [k, v] of Object.entries(groupVal)) {
-          if (isHexColor(v)) semanticEntries.push([`${groupKey}.${k}`, v]);
-        }
-      }
-    }
-  }
-
-  const scaleNames = ['brand', 'error', 'warning', 'success', 'neutral'] as const;
+  const scaleNames = ['orange', 'red', 'yellow', 'green', 'grey', 'blue'] as const;
 
   return (
     <div className="space-y-6">
-      {semanticEntries.length > 0 && (
-        <div className="space-y-2">
-          <h3 className="font-medium">Semantic</h3>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
-            {semanticEntries.map(([name, value]) => (
-              <Swatch key={name} name={name} value={value} />
-            ))}
-          </div>
-        </div>
-      )}
-
       {scaleNames.map((scaleName) => (
         <ColorScaleRow
           key={scaleName}
@@ -212,8 +184,8 @@ function TokensPage() {
     <div className="bg-white p-6 text-black">
       <div className="mx-auto max-w-6xl space-y-10">
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold">Design Tokens</h1>
-          <div className="text-sm text-black/60">Generated from Figma variables (Halala Tech) and rendered from `tokens.ts`.</div>
+          <h1 className="text-2xl font-semibold">MahalaDS Design Tokens</h1>
+          <div className="text-sm text-black/60">Generated from Figma (MahalaDS) and rendered from `tokens.ts`.</div>
         </header>
 
         <StorySection title="Colors">

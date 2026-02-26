@@ -18,90 +18,84 @@ export type ShadowToken = {
 
 export const tokens = {
   color: {
-    // Semantic colors (from Figma variables on `Base` page)
-    background: {
-      primary: "#FFFFFF",
-      secondary: "#F3F3F3",
-      tertiary: "#E8E8E8",
-      inversePrimary: "#000000",
+    orange: {
+      50: "#FFEFEF",
+      100: "#FFCCCD",
+      200: "#FFB3B5",
+      300: "#FF9094",
+      400: "#FF7B7F",
+      500: "#FF5A5F",
+      600: "#E85256",
+      700: "#B54043",
+      800: "#8C3234",
+      900: "#6B2628",
     },
-    content: {
-      primary: "#000000",
-      tertiary: "#5E5E5E",
-      inversePrimary: "#FFFFFF",
+    red: {
+      50: "#FEEBEB",
+      100: "#FAC0C2",
+      200: "#F8A1A4",
+      300: "#F5767A",
+      400: "#F35C61",
+      500: "#F03339",
+      600: "#DA2E34",
+      700: "#AA2428",
+      800: "#841C1F",
+      900: "#651518",
     },
-    border: {
-      opaque: "#E8E8E8",
+    yellow: {
+      50: "#FFF9E9",
+      100: "#FFEEBA",
+      200: "#FFE598",
+      300: "#FFD969",
+      400: "#FFD24C",
+      500: "#FFC71F",
+      600: "#E8B51C",
+      700: "#B58D16",
+      800: "#8C6D11",
+      900: "#6B540D",
     },
-
-    // Scales (from color scale frames)
-    brand: {
-      900: "#550C0E",
-      800: "#771518",
-      700: "#992226",
-      600: "#BB3236",
-      500: "#DD4449",
-      400: "#FF5A5F",
-      300: "#FF7F83",
-      200: "#FFA4A7",
-      100: "#FFC9CB",
-      50: "#FFEEEF",
+    green: {
+      50: "#ECFFEE",
+      100: "#C4FFC9",
+      200: "#A8FFAF",
+      300: "#80FF8A",
+      400: "#67FF73",
+      500: "#41FF50",
+      600: "#3BE849",
+      700: "#2EB539",
+      800: "#248C2C",
+      900: "#1B6B22",
     },
-    error: {
-      900: "#510000",
-      800: "#7A0000",
-      700: "#A30000",
-      600: "#CB1010",
-      500: "#F42828",
-      400: "#FF5050",
-      300: "#FF7676",
-      200: "#FF9D9D",
-      100: "#FFC3C3",
-      50: "#FFE9E9",
+    grey: {
+      50: "#F1F1F1",
+      100: "#D3D3D3",
+      200: "#BEBEBE",
+      300: "#A0A0A0",
+      400: "#8D8D8D",
+      500: "#717171",
+      600: "#676767",
+      700: "#505050",
+      800: "#3E3E3E",
+      900: "#2F2F2F",
     },
-    warning: {
-      900: "#554509",
-      800: "#776112",
-      700: "#997E1E",
-      600: "#BB9C2D",
-      500: "#DDBB3F",
-      400: "#FFDA54",
-      300: "#FFE27A",
-      200: "#FFEAA1",
-      100: "#FFF3C7",
-      50: "#FFFBEE",
-    },
-    success: {
-      900: "#004E07",
-      800: "#00760A",
-      700: "#009F0D",
-      600: "#00C811",
-      500: "#16F128",
-      400: "#41FF50",
-      300: "#6AFF77",
-      200: "#94FF9D",
-      100: "#BEFFC3",
-      50: "#E8FFE9",
-    },
-    neutral: {
-      950: "#131313",
-      900: "#2B2B2B",
-      800: "#424242",
-      700: "#5A5A5A",
-      600: "#717171",
-      500: "#898989",
-      400: "#A1A1A1",
-      300: "#B8B8B8",
-      200: "#D0D0D0",
-      100: "#E7E7E7",
-      50: "#F3F3F3",
+    blue: {
+      50: "#EAFBF9",
+      100: "#BEF2EB",
+      200: "#9EEBE2",
+      300: "#72E2D4",
+      400: "#57DDCC",
+      500: "#2DD4BF",
+      600: "#29C1AE",
+      700: "#209788",
+      800: "#197569",
+      900: "#135950",
     },
   },
 
   typography: {
     display: {
       large: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 96,
@@ -109,7 +103,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       medium: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 52,
@@ -117,7 +111,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       small: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 44,
@@ -125,7 +119,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       xSmall: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 36,
@@ -135,7 +129,7 @@ export const tokens = {
     },
     heading: {
       xxLarge: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 40,
@@ -143,7 +137,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       xLarge: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 36,
@@ -151,7 +145,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       large: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 32,
@@ -159,7 +153,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       medium: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 28,
@@ -167,7 +161,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       small: {
-        fontFamily: "Uber Move",
+        fontFamily: "Inter",
         fontStyle: "Bold",
         fontWeight: 700,
         fontSize: 24,
@@ -175,9 +169,9 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       xSmall: {
-        fontFamily: "Uber Move",
-        fontStyle: "Bold",
-        fontWeight: 700,
+        fontFamily: "Inter",
+        fontStyle: "Medium",
+        fontWeight: 500,
         fontSize: 20,
         lineHeight: 28,
         letterSpacing: 0.25,
@@ -185,7 +179,7 @@ export const tokens = {
     },
     label: {
       large: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Medium",
         fontWeight: 500,
         fontSize: 18,
@@ -193,7 +187,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       medium: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Medium",
         fontWeight: 500,
         fontSize: 16,
@@ -201,7 +195,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       small: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Medium",
         fontWeight: 500,
         fontSize: 14,
@@ -209,7 +203,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       xSmall: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Medium",
         fontWeight: 500,
         fontSize: 12,
@@ -219,7 +213,7 @@ export const tokens = {
     },
     paragraph: {
       large: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Regular",
         fontWeight: 400,
         fontSize: 18,
@@ -227,7 +221,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       medium: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Regular",
         fontWeight: 400,
         fontSize: 16,
@@ -235,7 +229,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       small: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Regular",
         fontWeight: 400,
         fontSize: 14,
@@ -243,7 +237,7 @@ export const tokens = {
         letterSpacing: 0,
       } satisfies FontToken,
       xSmall: {
-        fontFamily: "Uber Move Text",
+        fontFamily: "Inter",
         fontStyle: "Regular",
         fontWeight: 400,
         fontSize: 12,
@@ -253,7 +247,7 @@ export const tokens = {
     },
   },
 
-  // Spacing scale (from `Spacer` component variants)
+  // Spacing scale
   space: {
     4: 4,
     8: 8,
@@ -272,7 +266,6 @@ export const tokens = {
     128: 128,
   },
 
-  // Extra token surfaced in the file (useful for elevation)
   shadow: {
     shallowBelow: {
       type: "dropShadow",
@@ -286,4 +279,3 @@ export const tokens = {
 } as const;
 
 export type Tokens = typeof tokens;
-

@@ -1,54 +1,100 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
 import { fn } from 'storybook/test';
 
 import { Button } from './Button';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Example/Button',
+  title: 'Components/Button',
   component: Button,
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
-  // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    backgroundColor: { control: 'color' },
+    variant: {
+      control: 'select',
+      options: ['accent', 'dark', 'light', 'alert'],
+    },
+    buttonType: {
+      control: 'select',
+      options: ['primary', 'secondary', 'tertiary'],
+    },
+    fullWidth: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
-  // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
-  args: { onClick: fn() },
+  args: {
+    onClick: fn(),
+    children: 'Button',
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary: Story = {
-  args: {
-    primary: true,
-    label: 'Button',
-  },
+/* ---- Primary (filled) ---- */
+
+export const AccentPrimary: Story = {
+  args: { variant: 'accent', buttonType: 'primary' },
 };
 
-export const Secondary: Story = {
-  args: {
-    label: 'Button',
-  },
+export const DarkPrimary: Story = {
+  args: { variant: 'dark', buttonType: 'primary' },
 };
 
-export const Large: Story = {
-  args: {
-    size: 'large',
-    label: 'Button',
-  },
+export const LightPrimary: Story = {
+  args: { variant: 'light', buttonType: 'primary' },
+  parameters: { backgrounds: { default: 'dark' } },
 };
 
-export const Small: Story = {
-  args: {
-    size: 'small',
-    label: 'Button',
-  },
+export const AlertPrimary: Story = {
+  args: { variant: 'alert', buttonType: 'primary' },
+};
+
+/* ---- Secondary (outlined) ---- */
+
+export const AccentSecondary: Story = {
+  args: { variant: 'accent', buttonType: 'secondary' },
+};
+
+export const DarkSecondary: Story = {
+  args: { variant: 'dark', buttonType: 'secondary' },
+};
+
+export const AlertSecondary: Story = {
+  args: { variant: 'alert', buttonType: 'secondary' },
+};
+
+/* ---- Tertiary (ghost) ---- */
+
+export const AccentTertiary: Story = {
+  args: { variant: 'accent', buttonType: 'tertiary' },
+};
+
+export const DarkTertiary: Story = {
+  args: { variant: 'dark', buttonType: 'tertiary' },
+};
+
+export const AlertTertiary: Story = {
+  args: { variant: 'alert', buttonType: 'tertiary' },
+};
+
+/* ---- States ---- */
+
+export const Disabled: Story = {
+  args: { variant: 'accent', buttonType: 'primary', disabled: true },
+};
+
+export const DisabledSecondary: Story = {
+  args: { variant: 'accent', buttonType: 'secondary', disabled: true },
+};
+
+export const DisabledTertiary: Story = {
+  args: { variant: 'accent', buttonType: 'tertiary', disabled: true },
+};
+
+/* ---- Full Width ---- */
+
+export const FullWidth: Story = {
+  args: { variant: 'accent', buttonType: 'primary', fullWidth: true },
+  parameters: { layout: 'padded' },
 };

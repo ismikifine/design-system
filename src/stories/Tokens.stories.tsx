@@ -3,66 +3,100 @@ import React from 'react';
 
 import { tokens, type FontToken, type ShadowToken } from '../../tokens';
 
-type StorySectionProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
-function StorySection({ title, children }: StorySectionProps) {
-  return (
-    <section className="space-y-3">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <div>{children}</div>
-    </section>
-  );
-}
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
 
 function hexToRgb(hex: string) {
   const h = hex.replace('#', '');
-  const r = Number.parseInt(h.slice(0, 2), 16);
-  const g = Number.parseInt(h.slice(2, 4), 16);
-  const b = Number.parseInt(h.slice(4, 6), 16);
-  return { r, g, b };
+  return {
+    r: Number.parseInt(h.slice(0, 2), 16),
+    g: Number.parseInt(h.slice(2, 4), 16),
+    b: Number.parseInt(h.slice(4, 6), 16),
+  };
 }
 
 function preferredTextColor(bgHex: string) {
   const { r, g, b } = hexToRgb(bgHex);
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.6 ? '#000000' : '#FFFFFF';
+  return luminance > 0.55 ? '#000000' : '#FFFFFF';
 }
 
-function Swatch({ name, value }: { name: string; value: string }) {
-  const fg = preferredTextColor(value);
+/* ------------------------------------------------------------------ */
+/*  Typography helper                                                  */
+/* ------------------------------------------------------------------ */
+
+function fontStyle(token: FontToken): React.CSSProperties {
+  return {
+    fontFamily: token.fontFamily,
+    fontWeight: token.fontWeight,
+    fontSize: token.fontSize,
+    lineHeight: `${token.lineHeight}px`,
+    letterSpacing: `${token.letterSpacing}px`,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section wrapper                                                    */
+/* ------------------------------------------------------------------ */
+
+function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-black/10 p-3">
-      <div className="min-w-0">
-        <div className="truncate font-mono text-xs text-black/60">{name}</div>
-        <div className="font-mono text-xs">{value.toUpperCase()}</div>
+    <section className="space-y-5">
+      <div>
+        <h2 style={fontStyle(tokens.typography.heading.desktop.h5)}>{title}</h2>
+        {description && <p className="mt-1 text-black/50" style={fontStyle(tokens.typography.paragraph.small)}>{description}</p>}
       </div>
-      <div
-        className="h-10 w-20 shrink-0 rounded-md border border-black/10"
-        style={{ backgroundColor: value }}
-        aria-label={`${name} ${value}`}
-        title={`${name} ${value}`}
-      />
-      <div
-        className="h-10 w-10 shrink-0 rounded-md border border-black/10"
-        style={{ backgroundColor: value, color: fg }}
-        aria-hidden="true"
-      >
-        <div className="grid h-full w-full place-items-center text-[10px] font-semibold">Aa</div>
-      </div>
-    </div>
+      {children}
+    </section>
   );
 }
 
-function ColorScaleRow({ name, scale }: { name: string; scale: Record<string | number, string> }) {
+/* ------------------------------------------------------------------ */
+/*  Colors                                                             */
+/* ------------------------------------------------------------------ */
+
+function ColorScale({ name, scale }: { name: string; scale: Record<string | number, string> }) {
+  const entries = Object.entries(scale);
+
   return (
-    <div className="space-y-2">
-      <h3 className="font-medium capitalize">{name}</h3>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
-        {Object.entries(scale).map(([k, v]) => (
-          <Swatch key={`${name}.${k}`} name={`${name}.${k}`} value={v} />
+    <div className="space-y-3">
+      <h3 className="capitalize text-black/70" style={fontStyle(tokens.typography.paragraph.medium)}>{name}</h3>
+
+      {/* Continuous gradient strip */}
+      <div className="flex overflow-hidden rounded-xl">
+        {entries.map(([step, hex]) => {
+          const fg = preferredTextColor(hex);
+          return (
+            <div
+              key={step}
+              className="group relative flex-1 cursor-default transition-all hover:flex-[2]"
+              style={{ backgroundColor: hex, height: 72 }}
+              title={`${name}-${step}: ${hex}`}
+            >
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-opacity group-hover:opacity-100"
+                style={{ color: fg }}
+              >
+                <span style={fontStyle(tokens.typography.paragraph.extraSmall)}>{step}</span>
+                <span className="opacity-80" style={{ ...fontStyle(tokens.typography.paragraph.extraSmall), fontFamily: 'monospace' }}>{hex}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Detail chips */}
+      <div className="flex flex-wrap gap-1.5">
+        {entries.map(([step, hex]) => (
+          <div
+            key={step}
+            className="flex items-center gap-1.5 rounded-full border border-black/8 bg-white px-2.5 py-1"
+          >
+            <div className="h-3 w-3 rounded-full border border-black/10" style={{ backgroundColor: hex }} />
+            <span className="text-black/60" style={{ ...fontStyle(tokens.typography.paragraph.extraSmall), fontFamily: 'monospace' }}>{step}</span>
+            <span className="text-black/40" style={{ ...fontStyle(tokens.typography.paragraph.extraSmall), fontFamily: 'monospace' }}>{hex}</span>
+          </div>
         ))}
       </div>
     </div>
@@ -71,95 +105,101 @@ function ColorScaleRow({ name, scale }: { name: string; scale: Record<string | n
 
 function ColorSection() {
   const scaleNames = ['orange', 'red', 'yellow', 'green', 'grey', 'blue'] as const;
-
   return (
-    <div className="space-y-6">
-      {scaleNames.map((scaleName) => (
-        <ColorScaleRow
-          key={scaleName}
-          name={scaleName}
-          scale={tokens.color[scaleName]}
-        />
+    <div className="space-y-8">
+      {scaleNames.map((name) => (
+        <ColorScale key={name} name={name} scale={tokens.color[name]} />
       ))}
     </div>
   );
 }
 
-function fontStyleFromToken(token: FontToken): React.CSSProperties {
-  return {
-    fontFamily: token.fontFamily,
-    fontWeight: token.fontWeight,
-    fontSize: token.fontSize,
-    lineHeight: `${token.lineHeight}px`,
-    letterSpacing: `${token.letterSpacing}px`,
-    fontStyle: 'normal',
-  };
-}
+/* ------------------------------------------------------------------ */
+/*  Typography                                                         */
+/* ------------------------------------------------------------------ */
 
-function TypographySection() {
-  const blocks: Array<{ name: string; token: FontToken }> = [];
-
-  const addGroup = (prefix: string, group: Record<string, FontToken>) => {
-    for (const [k, v] of Object.entries(group)) blocks.push({ name: `${prefix}.${k}`, token: v });
-  };
-
-  addGroup('display', tokens.typography.display);
-  addGroup('heading', tokens.typography.heading);
-  addGroup('label', tokens.typography.label);
-  addGroup('paragraph', tokens.typography.paragraph);
-
+function TypographyRow({ name, token }: { name: string; token: FontToken }) {
   return (
-    <div className="space-y-3">
-      <div className="text-sm text-black/60">
-        Rendering sample text using each token's font family/size/weight/line-height/letter-spacing.
+    <div className="grid grid-cols-[220px_1fr] items-baseline gap-6 border-b border-black/5 py-4 last:border-0">
+      <div className="space-y-1">
+        <div className="text-black/80" style={fontStyle(tokens.typography.paragraph.small)}>{name}</div>
+        <div className="text-black/40" style={{ ...fontStyle(tokens.typography.paragraph.caption), fontFamily: 'monospace' }}>
+          {token.fontSize}px · {token.fontWeight} · {token.letterSpacing}px tracking
+        </div>
       </div>
-
-      <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-        {blocks.map(({ name, token }) => (
-          <div key={name} className="rounded-md border border-black/10 p-4">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <div className="font-mono text-xs text-black/60">{name}</div>
-              <div className="font-mono text-xs text-black/60">
-                {token.fontFamily} · {token.fontSize}px/{token.lineHeight}px · {token.fontWeight}
-              </div>
-            </div>
-            <div className="mt-2" style={fontStyleFromToken(token)}>
-              The quick brown fox jumps over the lazy dog.
-            </div>
-          </div>
-        ))}
+      <div className="min-w-0 truncate" style={fontStyle(token)}>
+        The quick brown fox
       </div>
     </div>
   );
 }
+
+function TypographySection() {
+  // Flatten heading desktop/mobile into rows
+  const groups: Array<[string, Record<string, FontToken>]> = [
+    ['heading (desktop)', tokens.typography.heading.desktop],
+    ['heading (mobile)', tokens.typography.heading.mobile],
+    ['paragraph', tokens.typography.paragraph],
+    ['button', tokens.typography.button],
+    ['form', tokens.typography.form],
+  ];
+
+  return (
+    <div className="space-y-6">
+      {groups.map(([groupName, group]) => (
+        <div key={groupName}>
+          <h3 className="mb-2 capitalize text-black/70" style={fontStyle(tokens.typography.paragraph.medium)}>{groupName}</h3>
+          <div className="rounded-xl border border-black/8 bg-white px-5">
+            {Object.entries(group).map(([key, token]) => (
+              <TypographyRow key={key} name={`${groupName.split(' ')[0]}.${key}`} token={token} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Spacing                                                            */
+/* ------------------------------------------------------------------ */
 
 function SpacingSection() {
   const entries = Object.entries(tokens.space)
     .map(([k, v]) => ({ key: k, value: v }))
     .sort((a, b) => a.value - b.value);
 
+  const max = Math.max(...entries.map((e) => e.value));
+
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
-        {entries.map(({ key, value }) => (
-          <div key={key} className="flex items-center gap-4 rounded-md border border-black/10 p-3">
-            <div className="w-24 font-mono text-xs text-black/70">{key}px</div>
-            <div className="flex-1">
-              <div className="h-3 rounded bg-black/5">
-                <div
-                  className="h-3 rounded bg-black/20"
-                  style={{ width: `${Math.max(6, Math.min(320, value * 2))}px` }}
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-            <div className="w-16 text-right font-mono text-xs text-black/70">{value}</div>
+    <div className="rounded-xl border border-black/8 bg-white">
+      {entries.map(({ key, value }, i) => (
+        <div
+          key={key}
+          className="grid grid-cols-[60px_60px_1fr] items-center gap-4 px-5 py-2.5"
+          style={{ borderTop: i > 0 ? '1px solid rgba(0,0,0,0.04)' : undefined }}
+        >
+          <span className="text-black/70" style={{ ...fontStyle(tokens.typography.paragraph.small), fontFamily: 'monospace' }}>{key}</span>
+          <span className="text-black/40" style={{ ...fontStyle(tokens.typography.paragraph.extraSmall), fontFamily: 'monospace' }}>{value}px</span>
+          <div className="flex items-center">
+            <div
+              className="h-4 rounded-r-full"
+              style={{
+                width: `${(value / max) * 100}%`,
+                minWidth: 4,
+                background: `linear-gradient(90deg, ${tokens.color.blue[400]}, ${tokens.color.blue[600]})`,
+              }}
+            />
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  Shadow                                                             */
+/* ------------------------------------------------------------------ */
 
 function shadowToCss(shadow: ShadowToken) {
   if (shadow.type !== 'dropShadow') return undefined;
@@ -168,45 +208,56 @@ function shadowToCss(shadow: ShadowToken) {
 
 function ShadowSection() {
   const shallow = tokens.shadow.shallowBelow;
+  const css = shadowToCss(shallow);
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-      <div className="rounded-md border border-black/10 p-4">
-        <div className="font-mono text-xs text-black/60">shadow.shallowBelow</div>
-        <div className="mt-3 h-24 rounded-md bg-white" style={{ boxShadow: shadowToCss(shallow) }} />
-        <div className="mt-3 font-mono text-xs text-black/60">{shadowToCss(shallow)}</div>
+    <div className="inline-flex flex-col items-start gap-4">
+      <div
+        className="flex h-32 w-64 items-center justify-center rounded-2xl bg-white"
+        style={{ boxShadow: css }}
+      >
+        <span className="text-black/40" style={{ ...fontStyle(tokens.typography.paragraph.small), fontFamily: 'monospace' }}>shallowBelow</span>
       </div>
+      <code className="rounded-lg bg-black/4 px-3 py-1.5 text-black/50" style={{ ...fontStyle(tokens.typography.paragraph.extraSmall), fontFamily: 'monospace' }}>{css}</code>
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  Page                                                               */
+/* ------------------------------------------------------------------ */
 
 function TokensPage() {
   return (
-    <div className="bg-white p-6 text-black">
-      <div className="mx-auto max-w-6xl space-y-10">
-        <header className="space-y-1">
-          <h1 className="text-2xl font-semibold">MahalaDS Design Tokens</h1>
-          <div className="text-sm text-black/60">Generated from Figma (MahalaDS) and rendered from `tokens.ts`.</div>
+    <div className="min-h-screen bg-[#FAFAFA] p-8 text-black">
+      <div className="mx-auto max-w-5xl space-y-12">
+        <header>
+          <h1 style={fontStyle(tokens.typography.heading.desktop.h4)}>MahalaDS</h1>
+          <p className="mt-1 text-black/50" style={fontStyle(tokens.typography.paragraph.medium)}>Design tokens generated from Figma</p>
         </header>
 
-        <StorySection title="Colors">
+        <Section title="Colors" description="6 palettes, 10 steps each (50 - 900).">
           <ColorSection />
-        </StorySection>
+        </Section>
 
-        <StorySection title="Typography">
+        <Section title="Typography" description="Inter font family across heading, paragraph, button, and form scales.">
           <TypographySection />
-        </StorySection>
+        </Section>
 
-        <StorySection title="Spacing">
+        <Section title="Spacing" description="4px base unit, 15 steps from 4 to 128.">
           <SpacingSection />
-        </StorySection>
+        </Section>
 
-        <StorySection title="Shadow">
+        <Section title="Shadow" description="Elevation tokens for depth.">
           <ShadowSection />
-        </StorySection>
+        </Section>
       </div>
     </div>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  Story                                                              */
+/* ------------------------------------------------------------------ */
 
 const meta = {
   title: 'Design Tokens/All',
